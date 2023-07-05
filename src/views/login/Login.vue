@@ -141,7 +141,7 @@ export default {
             console.log(err);
           })
         }else{
-          this.errorMessage='验证码输入错误'+this.true_code;
+          this.errorMessage='验证码输入错误';
           this.alert();
         }
       } else if (this.active.register) {
