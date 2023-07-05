@@ -4,9 +4,11 @@
       <img src="@/assets/bg1.jpg" alt="">
       <div class="panel">
         <div class="switch">
+          <button class="white-button" @click="handleCanvas"></button>
           <span :class='{"active": active.login}' @click="go('login')">登录</span>
           <span>/</span>
           <span :class='{"active": active.register}' @click="go('register')">注册</span>
+          <button class="white-button" ref="registerButton" @click="handleCanvas"></button>
         </div>
         <div class="form" id="fromLogin">
           <!-- 如果按钮选择的是注册就展示这个里面的内容 -->
@@ -14,32 +16,23 @@
             <el-form-item prop="username" class="input">
               <el-input placeholder="请输入用户名" size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="registerForm.user_name"></el-input>
             </el-form-item>
+            <el-form-item prop="username" class="input">
+              <el-input placeholder="请输入手机号码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-phone" v-model="registerForm.user_tele"></el-input>
+            </el-form-item>
             <el-form-item prop="password" class="input">
               <el-input placeholder="请输入密码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-aim" show-password v-model="registerForm.password"></el-input>
             </el-form-item>
             <el-form style="display: flex; height: 2rem;">
               <el-form-item prop="username">
-                <el-input placeholder="请输入邮箱" size="medium" style="margin: 10px 0" prefix-icon="el-icon-aim" v-model="registerForm.mail_or_id"></el-input>
+                <el-input placeholder="请输入验证码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-aim" v-model="code"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button  class="send_button" style="height:100%;border-radius: 1rem; margin: 10px 0;" @click="send">发送验证码</el-button>
+                <canvas id="canvas" width="96px" height="44px" @click="handleCanvas"></canvas>
               </el-form-item>
             </el-form>
-            <el-form-item prop="password" class="input">
-              <el-input placeholder="请输入验证码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-aim" show-password v-model="registerForm.verify_code"></el-input>
-            </el-form-item>
             <el-form-item prop="username" class="input">
               <el-input placeholder="请输入真实姓名" size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="registerForm.user_real_name"></el-input>
             </el-form-item>
-            <el-form-item prop="username" class="input">
-              <el-input placeholder="请输入手机号码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-phone" v-model="registerForm.user_tele"></el-input>
-            </el-form-item>
-<!--            性别-->
-<!--            <el-form-item prop="username" class="input">-->
-<!--              <div>性别：</div>-->
-<!--              <el-radio v-model="registerForm.user_sex" label="1">男</el-radio>-->
-<!--              <el-radio v-model="registerForm.user_sex" label="2">女</el-radio>-->
-<!--            </el-form-item>-->
             <el-form-item>
               <el-button  @click="submit">注册</el-button>
             </el-form-item>
@@ -48,7 +41,7 @@
           <!-- 如果按钮选择的是登录就展示这个里面的内容 -->
           <el-form ref="loginForm" v-if="active.login">
             <el-form-item prop="username" class="input">
-              <el-input placeholder="请输入账号/邮箱" size="15px" style="margin: 15px 0" prefix-icon="el-icon-user" v-model="loginForm.mail_or_id"></el-input>
+              <el-input placeholder="请输入手机号" size="15px" style="margin: 15px 0" prefix-icon="el-icon-user" v-model="loginForm.user_tele"></el-input>
             </el-form-item>
             <el-form-item prop="password" class="input">
               <el-input placeholder="请输入密码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-aim" show-password v-model="loginForm.password"></el-input>
@@ -81,15 +74,16 @@ export default {
       showPassword: false, // Add this line
       errorMessage:'',
       successMessage:'',
+      code:'',
+      true_code:'',
+      yanzheng_arr:[],
       loginForm :{
-        mail_or_id : '',
+        user_tele : '',
         password : ''
       },
       registerForm:{
         user_name : '',
-        mail_or_id : '',
         password : '',
-        verify_code : '',
         user_tele:'',
         user_real_name:''
       }
@@ -105,7 +99,15 @@ export default {
       this.active = {
         login: type === 'login',
         register: type === 'register'
-      };
+      }
+      if (type === 'register') {
+        this.$nextTick(() => {
+          const registerButton = this.$refs.registerButton;
+          if (registerButton) {
+            registerButton.click();
+          }
+        });
+      }
     },
     //警告提示
     alert(){
@@ -123,57 +125,122 @@ export default {
     },
     submit() {
       if (this.active.login) {
-        request.post('/user/loginWithPassword',this.loginForm).then(res => {
-          console.log(res.data);
-          if(res.code===500){
-            this.errorMessage='该账号密码错误'
-            this.alert();
-          }else if(res.code===200){
-            //保存token
-            Cookies.set('token',JSON.stringify(res.data))
-            //跳转到主页
-            this.$router.push('/home');
-          }
-        }).catch((err)=>{
-          console.log(err);
-        })
+        if(this.code === this.true_code){
+          request.post('/user/loginWithPassword',this.loginForm).then(res => {
+            console.log(res.data);
+            if(res.code===500){
+              this.errorMessage='该账号密码错误'
+              this.alert();
+            }else if(res.code===200){
+              //保存token
+              Cookies.set('token',JSON.stringify(res.data))
+              //跳转到主页
+              this.$router.push('/home');
+            }
+          }).catch((err)=>{
+            console.log(err);
+          })
+        }else{
+          this.errorMessage='验证码输入错误'+this.true_code;
+          this.alert();
+        }
       } else if (this.active.register) {
-        request.post('/user/register',this.registerForm).then(res => {
-          console.log(res.data);
-          if(res.code===200){
-            this.successMessage='成功注册';
-            this.node();
-            this.go('login');
-          }else if(this.registerForm.user_name.length<5){
-            this.errorMessage='用户名不得小于5位'
-            this.alert();
-          }else if(this.registerForm.password.length<6){
-            this.errorMessage='密码不得小于6位';
-            this.alert();
-          }else if(res.code===500){
-            this.errorMessage=res.data.msg;
-            this.alert();
-          }
-        }).catch((err)=>{
-          console.log(err);
-        })
+        if(this.code === this.true_code){
+          request.post('/user/register',this.registerForm).then(res => {
+            console.log(res.data);
+            if(res.code===200){
+              this.successMessage='成功注册';
+              this.node();
+              this.go('login');
+            }else if(this.registerForm.user_name.length<5){
+              this.errorMessage='用户名不得小于5位'
+              this.alert();
+            }else if(this.registerForm.password.length<6){
+              this.errorMessage='密码不得小于6位';
+              this.alert();
+            }else if(res.code===500){
+              this.errorMessage=res.data.msg;
+              this.alert();
+            }
+          }).catch((err)=>{
+            console.log(err);
+          })
+        }else{
+          this.errorMessage='验证码输入错误';
+          this.alert();
+        }
       }
     },
-    send(){
-      console.log(this.registerForm.mail_or_id);
-      const data = JSON.stringify({email: this.registerForm.mail_or_id });
-      request.post('/user/sendVerifyCode',data).then(res => {
-        console.log(res.data);
-        if(res.data.code===500){
-          this.errorMessage='请输入正确的邮箱'
-          this.alert();
-        }else if(res.data.code===200){
-          this.successMessage="验证码成功发送"
-          this.node();
-        }
-      }).catch((err)=>{
-        console.log(err);
-      })
+    draw(show_num) {
+      var canvas_width =  document.querySelector("#canvas").clientWidth;
+      var canvas_height = document.querySelector("#canvas").clientHeight;
+      var canvas = document.getElementById("canvas"); //获取到canvas
+      var context = canvas.getContext("2d"); //获取到canvas画图
+      canvas.width = canvas_width;
+      canvas.height = canvas_height;
+      var sCode = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0";
+      var aCode = sCode.split(",");
+      var aLength = aCode.length; //获取到数组的长度
+
+      //4个验证码数
+      for (var i = 0; i <= 3; i++) {
+        var j = Math.floor(Math.random() * aLength); //获取到随机的索引值
+        var deg = (Math.random() * 30 * Math.PI) / 180; //产生0~30之间的随机弧度
+        var txt = aCode[j]; //得到随机的一个内容
+        show_num[i] = txt.toLowerCase();// 依次把取得的内容放到数组里面
+        var x = 10 + i * 20; //文字在canvas上的x坐标
+        var y = 20 + Math.random() * 8; //文字在canvas上的y坐标
+        context.font = "bold 23px 微软雅黑";
+
+        context.translate(x, y);
+        context.rotate(deg);
+
+        context.fillStyle = this.randomColor();
+        context.fillText(txt, 0, 0);
+
+        context.rotate(-deg);
+        context.translate(-x, -y);
+      }
+      //验证码上显示6条线条
+      for (var i = 0; i <= 5; i++) {
+        context.strokeStyle = this.randomColor();
+        context.beginPath();
+        context.moveTo(
+            Math.random() * canvas_width,
+            Math.random() * canvas_height
+        );
+        context.lineTo(
+            Math.random() * canvas_width,
+            Math.random() * canvas_height
+        );
+        context.stroke();
+      }
+      //验证码上显示31个小点
+      for (var i = 0; i <= 30; i++) {
+        context.strokeStyle = this.randomColor();
+        context.beginPath();
+        var x = Math.random() * canvas_width;
+        var y = Math.random() * canvas_height;
+        context.moveTo(x, y);
+        context.lineTo(x + 1, y + 1);
+        context.stroke();
+      }
+
+      //最后把取得的验证码数组存起来，方式不唯一
+      var num = show_num.join("");
+      // console.log(num);
+      this.true_code = num
+    },
+    //得到随机的颜色值
+    randomColor() {
+      var r = Math.floor(Math.random() * 256);
+      var g = Math.floor(Math.random() * 256);
+      var b = Math.floor(Math.random() * 256);
+      return "rgb(" + r + "," + g + "," + b + ")";
+    },
+    //canvas点击刷新
+    handleCanvas(){
+      this.draw(this.yanzheng_arr);
     }
   }
 }
@@ -209,7 +276,7 @@ export default {
 
 .panel{
   width: 44%;
-  margin: 2rem -2rem 0;
+  margin: 4rem -2rem 0;
   position: absolute;
   right: 0;
   top: 0;
@@ -280,6 +347,14 @@ export default {
   right: 10px;
   transform: translateY(-50%);
   cursor: pointer;
+}
+
+.white-button {
+  background-color: white;
+  border: none;
+  color: black;
+  padding: 12px 8px;
+  border-radius: 4px;
 }
 
 
