@@ -5,8 +5,9 @@ import router from '../router/index'
 const token = localStorage.getItem("token")
 
 const request = axios.create({
-    baseURL: 'http://localhost:8090',
-    timeout: 5000
+    baseURL: 'https://615127d40k.zicp.fun',
+    timeout: 50000,
+    headers: {'Authorization': "Bearer "+token,'Content-Type':'application/json;',}
 })
 
 // request 拦截器
