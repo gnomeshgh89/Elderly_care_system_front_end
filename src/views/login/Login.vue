@@ -295,6 +295,7 @@ export default {
 .container{
   /* 相对定位 */
   position: relative;
+  margin-top: 130px;
   width: 70rem;
 }
 
