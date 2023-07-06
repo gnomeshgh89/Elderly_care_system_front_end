@@ -8,16 +8,28 @@
         <i class="el-icon-caret-bottom"></i>
       </span>
       <el-dropdown-menu slot="dropdown" style="width: 87px; position: center">
-        <el-dropdown-item>查看信息</el-dropdown-item>
-        <el-dropdown-item>退出登录</el-dropdown-item>
+        <el-dropdown-item @click.native="view_manager()">查看信息</el-dropdown-item>
+        <el-dropdown-item @click.native="go_login()">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
 </template>
 
 <script>
-
+export default {
+  methods: {
+    view_manager(){
+      //后端传管理员信息
+      this.$router.push('/managerInfo');
+    },
+    go_login(){
+      //去登录界面
+      this.$router.push('/login');
+    }
+  }
+}
 </script>
+
 
 <style scoped>
 .header{

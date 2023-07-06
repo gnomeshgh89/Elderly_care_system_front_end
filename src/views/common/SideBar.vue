@@ -40,7 +40,7 @@
       <el-submenu index="6">
         <template slot="title"><i class="el-icon-user-solid"></i>管理员信息管理</template>
         <el-menu-item-group>
-          <el-menu-item index="6-1">查看管理员信息</el-menu-item>
+          <el-menu-item index="6-1" @click="view_manager()">查看管理员信息</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
@@ -56,6 +56,10 @@ export default {
     old_mes(){
       //后端传老人信息
       this.$router.push('/oldMen');
+    },
+    view_manager(){
+      //后端传管理员信息
+      this.$router.push('/managerInfo');
     }
   }
 }
