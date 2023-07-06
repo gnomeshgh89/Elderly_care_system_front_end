@@ -17,6 +17,12 @@ const routes = [
         meta: { title: '老人列表' }
       },
       {
+        //添加老人
+        path:'/addOld',
+        component:() =>import('../views/page/old/addOld.vue'),
+        meta: { title: '添加老人' }
+      },
+      {
         // 老人统计分析图
         path:'/oldImage',
         component:() =>import('../views/page/old/oldImage.vue'),
