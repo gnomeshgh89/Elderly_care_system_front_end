@@ -61,7 +61,6 @@
 </template>
 
 <script>
-import request from "@/utils/request";
 import {login,loginAuto} from "@/api/user";
 
 export default {
