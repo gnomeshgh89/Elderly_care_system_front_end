@@ -6,6 +6,14 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/login',
+    name: 'Login',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import('@/views/login/Login.vue')
+  },
+  {
     path: '/',
     name: 'home',
     component: Home,
@@ -27,16 +35,21 @@ const routes = [
         path:'/oldImage',
         component:() =>import('../views/page/old/oldImage.vue'),
         meta:{title:'老人统计分析图'}
+      },
+      {
+        //查看具体老人信息
+        path:'/oldMes',
+        component:() =>import('../views/page/old/oldMes.vue'),
+        meta: { title: '查看老人信息' }
+      },
+      {
+        //查看管理员信息
+        path:'/managerInfo',
+        component:() =>import('../views/page/manager/managerInfo.vue'),
+        meta: { title: '查看管理员信息' }
+
       }
     ]
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import('@/views/login/Login.vue')
   }
 ]
 

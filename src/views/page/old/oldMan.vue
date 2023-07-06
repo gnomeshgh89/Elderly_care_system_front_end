@@ -29,7 +29,7 @@
           align="center">
       </el-table-column>
       <el-table-column
-          prop="address"
+          prop="roomNumber"
           label="家庭地址"
           width="225"
           align="center">
@@ -46,8 +46,7 @@
           width="275"
           align="center">
         <template slot-scope="scope">
-          <el-button  type="text" size="small">录入人脸</el-button>
-          <el-button  type="text" size="small">查看</el-button>
+          <el-button  type="text" size="small" @click.native.prevent="viewMan(scope.$index)">查看</el-button>
           <el-button type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
@@ -60,8 +59,14 @@
 <script>
 export default {
   methods: {
+    //添加老人
     addOld: function () {
       this.$router.push('/addOld')
+    },
+    //查看老人
+    viewMan:function(index){
+
+      this.$router.push('/oldMes')
     },
   }
 }

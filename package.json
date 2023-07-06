@@ -17,6 +17,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^5.0.0",
     "@vue/cli-service": "^5.0.0",
+    "echarts": "^5.4.2",
     "vue-template-compiler": "^2.6.14"
   },
   "browserslist": [
