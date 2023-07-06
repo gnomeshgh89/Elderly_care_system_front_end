@@ -62,6 +62,7 @@
 
 <script>
 import request from "@/utils/request";
+import {login,loginAuto} from "@/api/user";
 
 export default {
   name: "Login.vue",
@@ -81,6 +82,7 @@ export default {
         user_tele : '',
         password : ''
       },
+      token: localStorage.getItem("token"),
       registerForm:{
         user_name : '',
         password : '',
@@ -126,45 +128,72 @@ export default {
     submit() {
       if (this.active.login) {
         if(this.code === this.true_code){
-          request.post('/user/loginWithPassword',this.loginForm).then(res => {
+          //先调自动登录接口
+          loginAuto(this.token).then(res => {
             console.log(res.data);
-            if(res.code===500){
-              this.errorMessage='该账号密码错误'
-              this.alert();
-            }else if(res.code===200){
-              //保存token
-              Cookies.set('token',JSON.stringify(res.data))
-              //跳转到主页
-              this.$router.push('/home');
-            }
+            if(res.code===200){
+              this.$store.commit('user/saveToken', res.data.token)//保存新token
+            }else {//未登录则调登录接口
+              login(this.loginForm).then(res => {
+                console.log(res.data);
+                if(res.code===500){
+                  this.errorMessage='该账号密码错误'
+                  this.alert();
+                }else if(res.code===200){
+                  //保存token
+                  this.$store.commit('user/saveToken', res.data.token)
+                  // this.$store.commit('user/saveLoginUser', res.data.uid)
+                  // Cookies.set('token',JSON.stringify(res.data))
+                  //跳转到主页
+                  this.$router.push('/home');
+                }
+              }).catch((err)=>{
+                console.log(err);
+              })}
           }).catch((err)=>{
             console.log(err);
           })
+          // login(this.loginForm).then(res => {
+          //   console.log(res.data);
+          //   if(res.code===500){
+          //     this.errorMessage='该账号密码错误'
+          //     this.alert();
+          //   }else if(res.code===200){
+          //     //保存token
+          //     this.$store.commit('user/saveToken', res.data.token)
+          //     // this.$store.commit('user/saveLoginUser', res.data.uid)
+          //     // Cookies.set('token',JSON.stringify(res.data))
+          //     //跳转到主页
+          //     this.$router.push('/home');
+          //   }
+          // }).catch((err)=>{
+          //   console.log(err);
+          // })
         }else{
           this.errorMessage='验证码输入错误';
           this.alert();
         }
       } else if (this.active.register) {
         if(this.code === this.true_code){
-          request.post('/user/register',this.registerForm).then(res => {
-            console.log(res.data);
-            if(res.code===200){
-              this.successMessage='成功注册';
-              this.node();
-              this.go('login');
-            }else if(this.registerForm.user_name.length<5){
-              this.errorMessage='用户名不得小于5位'
-              this.alert();
-            }else if(this.registerForm.password.length<6){
-              this.errorMessage='密码不得小于6位';
-              this.alert();
-            }else if(res.code===500){
-              this.errorMessage=res.data.msg;
-              this.alert();
-            }
-          }).catch((err)=>{
-            console.log(err);
-          })
+          // request.post('/user/register',this.registerForm).then(res => {
+          //   console.log(res.data);
+          //   if(res.code===200){
+          //     this.successMessage='成功注册';
+          //     this.node();
+          //     this.go('login');
+          //   }else if(this.registerForm.user_name.length<5){
+          //     this.errorMessage='用户名不得小于5位'
+          //     this.alert();
+          //   }else if(this.registerForm.password.length<6){
+          //     this.errorMessage='密码不得小于6位';
+          //     this.alert();
+          //   }else if(res.code===500){
+          //     this.errorMessage=res.data.msg;
+          //     this.alert();
+          //   }
+          // }).catch((err)=>{
+          //   console.log(err);
+          // })
         }else{
           this.errorMessage='验证码输入错误';
           this.alert();
