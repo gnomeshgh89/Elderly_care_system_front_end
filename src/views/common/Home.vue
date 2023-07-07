@@ -5,6 +5,7 @@
     <!--    侧边栏     -->
     <v-sides></v-sides>
     <div style="width:calc(100vw - 250px); float:right; overflow-y: scroll; height:calc(100vh - 60px);">
+      <!--    组件的显示    -->
       <router-view></router-view>
     </div>
   </div>

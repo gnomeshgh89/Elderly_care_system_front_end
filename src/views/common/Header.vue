@@ -9,6 +9,7 @@
       </span>
       <el-dropdown-menu slot="dropdown" style="width: 87px; position: center">
         <el-dropdown-item @click.native="view_manager()">查看信息</el-dropdown-item>
+        <el-dropdown-item @click.native="change_pwd()">修改密码</el-dropdown-item>
         <el-dropdown-item @click.native="go_login()">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -25,7 +26,11 @@ export default {
     go_login(){
       //去登录界面
       this.$router.push('/login');
-    }
+    },
+    change_pwd(){
+      //更改密码
+      this.$router.push('/changePwd');
+    },
   }
 }
 </script>
