@@ -1,5 +1,6 @@
 <template>
   <div style="width:500px;margin-left:270px;">
+    <el-dialog>
     <el-form style="height: 5px;"></el-form>
     <el-form style="height: 20px; margin-left: -200px; font-size: 25px; font-weight: bold;color: #676060">查看/更新老人信息:</el-form>
     <el-form ref="form" :model="form" label-width="140px">
@@ -60,15 +61,16 @@
           >
             <i class="el-icon-plus"></i>
           </el-upload>
-          <el-dialog v-model="form.dialogVisible">
-            <img width="100%" :src="form.dialogImageUrl" alt="" />
-          </el-dialog>
+<!--          <el-dialog v-model="form.dialogVisible">-->
+<!--            <img width="100%" :src="form.dialogImageUrl" alt="" />-->
+<!--          </el-dialog>-->
         </div>
       </el-form-item>
       <el-form-item  style="width:100%;">
         <el-button type="primary" @click="modify"  style="width:50%;margin-left:80px;margin-top:10px;border-color:#f88901;background-color: #F3CEAE">更改老人信息</el-button>
       </el-form-item>
     </el-form>
+    </el-dialog>
   </div>
 
 </template>

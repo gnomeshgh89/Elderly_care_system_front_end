@@ -5,9 +5,9 @@ import router from '../router/index'
 const token = localStorage.getItem("token")
 
 const request = axios.create({
-    baseURL: 'https://615127d40k.zicp.fun',
+    baseURL: 'http://kq543w.natappfree.cc',
     timeout: 50000,
-    headers: {'Authorization': "Bearer "+token,'Content-Type':'application/json;',}
+    headers: {'Content-Type':'application/json;',}
 })
 
 // request 拦截器
