@@ -62,7 +62,8 @@
         </div>
       </el-form-item>
       <el-form-item  style="width:100%;">
-        <el-button type="primary" style="width:50%;margin-left:80px;margin-top:10px;border-color:#f88901;background-color: #F3CEAE">添加老人</el-button>
+        <el-button type="primary" @click="old_add" style="width:50%;margin-left:80px;margin-top:10px;border-color:#f88901;background-color: #F3CEAE">添加老人</el-button>
+        <el-button type="primary" @click="back" style="width:50%;margin-left:80px;margin-top:10px;border-color:#f88901;background-color: #F3CEAE">返回老人列表</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -93,6 +94,14 @@ export default {
         dialogImageUrl: "",
         dialogVisible: false,
       }
+    }
+  },
+  methods:{
+    old_add() {
+      this.$router.push('/oldMen');
+    },
+    back(){
+      this.$router.push('/oldMen');
     }
   }
 }
