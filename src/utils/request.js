@@ -5,7 +5,7 @@ import router from '../router/index'
 const token = localStorage.getItem("token")
 
 const service = axios.create({
-    baseURL: 'http://kxdsnu.natappfree.cc',
+    baseURL: 'http://gm9vxj.natappfree.cc',
     timeout: 50000,
     headers: {'Authorization': token}
 })
