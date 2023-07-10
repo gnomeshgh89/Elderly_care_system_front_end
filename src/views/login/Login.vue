@@ -147,7 +147,7 @@ export default {
               this.alert();
             } else if (res.code == 1) {
               //保存token
-              // this.$store.commit('user/saveToken', res.data)
+              this.$store.commit('user/saveToken', res.data)
 
               console.log(res.data,localStorage.getItem("token"),1704)
               // console.log(r)

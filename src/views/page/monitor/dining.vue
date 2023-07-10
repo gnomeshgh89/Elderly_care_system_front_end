@@ -1,7 +1,8 @@
 <template>
   <div style="display: inline">
-    <!--    <img src="http://127.0.0.1:5001/living">-->
-    <img src="@/assets/user.png" style="height: 600px;width: 700px;margin-left: 20px">
+<!--        <img src="http://127.0.0.1:5001/living">-->
+    <img src="http://192.168.1.156:5001/corridor">
+<!--    <img src="@/assets/user.png" style="height: 600px;width: 700px;margin-left: 20px">-->
     <div style="width:500px;margin-left:80px; float: left; position: absolute; color:#9b8060; font-size: 20px; font-weight: bold">
       <div>
         <span class="intro">老人姓名: </span>

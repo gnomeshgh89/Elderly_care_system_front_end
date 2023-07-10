@@ -62,53 +62,56 @@
         layout="total, sizes, prev, pager, next, jumper"
         style=" margin: auto">
     </el-pagination>
-    <i id="icon" class = "el-icon-circle-plus" @click = "addOld"></i>
+    <i id="icon" class = "el-icon-circle-plus" @click = "add()"></i>
 
-    <el-dialog title="老人信息详情" :visible.sync="oldMesVisible" width="900px">
+    <el-dialog :title="oldMesTitle" :visible.sync="oldMesVisible" width="900px">
       <el-form ref="form" :model="form" label-width="140px"  >
-      <el-form-item label="姓名">
-        <el-input v-model="form.username" :disabled="true"></el-input>
-      </el-form-item>
-      <el-form-item label="性别">
-        <el-input v-model="form.gender" :disabled="true"></el-input>
-      </el-form-item>
-      <el-form-item label="电话" prop="phone">
-        <el-input v-model="form.phone"></el-input>
-      </el-form-item>
-<!--      <el-form-item label="身份证号" prop="ID">-->
-<!--        <el-input v-model="form.ID" :disabled="true"></el-input>-->
-<!--      </el-form-item>-->
-      <el-form-item label="生日">
-        <el-input v-model="form.birthday" :disabled="true"></el-input>
-      </el-form-item>
-      <el-form-item label="住址">
-        <el-input v-model="form.address"></el-input>
-      </el-form-item>
-      <el-form-item label="第一监护人姓名">
-        <el-input v-model="form.firstGuardianName"></el-input>
-      </el-form-item>
-      <el-form-item label="第一监护人电话">
-        <el-input v-model="form.firstGuardianPhone"></el-input>
-      </el-form-item>
-      <el-form-item label="第一监护人微信">
-        <el-input v-model="form.firstGuardianWechat"></el-input>
-      </el-form-item>
-      <el-form-item label="健康状态">
-        <el-input v-model="form.health_state"></el-input>
-      </el-form-item>
-      <el-form-item label="描述">
-        <el-input v-model="form.des"></el-input>
-      </el-form-item>
-      <el-form-item label="创建日期">
-        <el-input v-model="form.createTime" :disabled="true"></el-input>
-      </el-form-item>
-      <el-form-item label="创建人">
-        <el-input v-model="form.createName" :disabled="true"></el-input>
-      </el-form-item>
+        <el-form-item label="姓名">
+          <el-input v-model="form.username" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="性别">
+          <el-input v-model="form.gender" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="phone">
+          <el-input v-model="form.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号" prop="ID">
+          <el-input v-model="form.id_card" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="生日">
+          <el-input v-model="form.birthday" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="住址">
+          <el-input v-model="form.address"></el-input>
+        </el-form-item>
+        <el-form-item label="第一监护人姓名">
+          <el-input v-model="form.firstGuardianName"></el-input>
+        </el-form-item>
+        <el-form-item label="第一监护人电话">
+          <el-input v-model="form.firstGuardianPhone"></el-input>
+        </el-form-item>
+        <el-form-item label="第一监护人微信">
+          <el-input v-model="form.firstGuardianWechat"></el-input>
+        </el-form-item>
+        <el-form-item label="健康状态">
+          <el-input v-model="form.health_state"></el-input>
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input v-model="form.des"></el-input>
+        </el-form-item>
+        <el-form-item label="创建日期">
+          <el-input v-model="form.createTime" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="创建人">
+          <el-input v-model="form.createName" :disabled="true"></el-input>
+        </el-form-item>
 
-      <el-form-item  style="width:100%;">
-        <el-button type="primary" @click="modify"  style="width:50%;margin-left:80px;margin-top:10px;border-color:#f88901;background-color: #F3CEAE">更改老人信息</el-button>
-      </el-form-item>
+        <el-form-item  style="width:100%;" v-if="oldMesType===2">
+          <el-button type="primary" @click="updateOld()"  style="width:50%;margin-left:80px;margin-top:10px;border-color:#f88901;background-color: #F3CEAE">更改老人信息</el-button>
+        </el-form-item>
+        <el-form-item  style="width:100%;" v-if="oldMesType===3">
+          <el-button type="primary" @click="addOld()"  style="width:50%;margin-left:80px;margin-top:10px;border-color:#f88901;background-color: #F3CEAE">新增老人信息</el-button>
+        </el-form-item>
       </el-form>
     </el-dialog>
 
@@ -119,7 +122,7 @@
 </template>
 <script>
 import oldMes from "@/views/page/old/oldMes";
-import {deleteElder, elderByID, elderList} from "@/api/elder";
+import {addElder, deleteElder, elderByID, elderList, updateElder} from "@/api/elder";
 
 export default {
   components:{oldMes},
@@ -134,7 +137,8 @@ export default {
       },
       elderList:[],
       oldMesVisible:false,
-      oldMesTitle:'查看信息',
+      oldMesTitle:'查看老人信息',
+      oldMesType:1,//1仅查看2修改3新增
       form:{
         dialogImageUrl: "",
         dialogVisible: false,
@@ -143,7 +147,7 @@ export default {
         username:'',
         gender:'',
         phone:'',
-        ID:'',
+        id_card:'',
         birthday: '',
         address: '',
         firstGuardianName: '',
@@ -182,17 +186,19 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+      this.getElderList()
     },
     //添加老人
-    addOld() {
-      // this.$router.push('/addOld')
+    add() {
+      this.oldMesTitle='新增老人信息'
+      this.oldMesType=3
+      this.oldMesVisible=true
     },
     //查看老人
     viewMan(item){
-      this.oldMesTitle='查看信息'
+      this.oldMesTitle='查看老人信息'
+      this.oldMesType=1
       this.oldMesVisible=true
-
-
       elderByID(item.id).then(res => {
         console.log(this.oldMesVisible,1553)
         this.form=res.data
@@ -203,9 +209,38 @@ export default {
       })
       // this.$router.push('/oldMes')
     },
-    updateMan(index){
-      this.oldMesTitle='修改信息'
+    updateMan(item){
+      this.oldMesTitle='修改老人信息'
+      this.oldMesType=2
       this.oldMesVisible=true
+      elderByID(item.id).then(res => {
+        console.log(this.oldMesVisible,1553)
+        this.form=res.data
+        // this.elderList= res.data.records
+        // this.listForm.total=res.data.records.length
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    updateOld(){
+      updateElder(this.form).then(res => {
+        // this.elderList= res.data.records
+        // this.listForm.total=res.data.records.length
+        this.getElderList()
+      }).catch(error => {
+        console.log(error)
+      })
+      this.oldMesVisible=false
+    },
+    addOld(){
+      addElder(this.form).then(res => {
+        // this.elderList= res.data.records
+        // this.listForm.total=res.data.records.length
+        this.getElderList()
+      }).catch(error => {
+        console.log(error)
+      })
+      this.oldMesVisible=false
     },
     handleSizeChange(value){
       this.listForm.size = value;
