@@ -14,10 +14,10 @@
           <!-- 如果按钮选择的是注册就展示这个里面的内容 -->
           <el-form ref="registerForm" v-if="active.register">
             <el-form-item prop="username" class="input">
-              <el-input placeholder="请输入用户名" size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="registerForm.user_name"></el-input>
+              <el-input placeholder="请输入用户名" size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="registerForm.username"></el-input>
             </el-form-item>
-            <el-form-item prop="username" class="input">
-              <el-input placeholder="请输入手机号码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-phone" v-model="registerForm.user_tele"></el-input>
+            <el-form-item prop="phone" class="input">
+              <el-input placeholder="请输入手机号码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-phone" v-model="registerForm.phone"></el-input>
             </el-form-item>
             <el-form-item prop="password" class="input">
               <el-input placeholder="请输入密码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-aim" show-password v-model="registerForm.password"></el-input>
@@ -30,8 +30,11 @@
                 <canvas id="canvas" width="96px" height="44px" @click="handleCanvas"></canvas>
               </el-form-item>
             </el-form>
-            <el-form-item prop="username" class="input">
-              <el-input placeholder="请输入真实姓名" size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="registerForm.user_real_name"></el-input>
+            <el-form-item prop="realName" class="input">
+              <el-input placeholder="请输入真实姓名" size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="registerForm.realName"></el-input>
+            </el-form-item>
+            <el-form-item prop="email" class="input">
+              <el-input placeholder="请输入邮箱" size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="registerForm.email"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button  @click="submit">注册</el-button>
@@ -41,7 +44,7 @@
           <!-- 如果按钮选择的是登录就展示这个里面的内容 -->
           <el-form ref="loginForm" v-if="active.login">
             <el-form-item prop="username" class="input">
-              <el-input placeholder="请输入手机号" size="15px" style="margin: 15px 0" prefix-icon="el-icon-user" v-model="loginForm.user_tele"></el-input>
+              <el-input placeholder="请输入手机号" size="15px" style="margin: 15px 0" prefix-icon="el-icon-user" v-model="loginForm.phone"></el-input>
             </el-form-item>
             <el-form-item prop="password" class="input">
               <el-input placeholder="请输入密码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-aim" show-password v-model="loginForm.password"></el-input>
@@ -61,7 +64,9 @@
 </template>
 
 <script>
-import {login,loginAuto} from "@/api/user";
+import request from "@/utils/request";
+import {login, loginAuto, register} from "@/api/user";
+import axios from "axios";
 
 export default {
   name: "Login.vue",
@@ -78,15 +83,16 @@ export default {
       true_code:'',
       yanzheng_arr:[],
       loginForm :{
-        user_tele : '',
+        phone : '',
         password : ''
       },
       token: localStorage.getItem("token"),
       registerForm:{
-        user_name : '',
+        username : '',
         password : '',
-        user_tele:'',
-        user_real_name:''
+        phone:'',
+        realName:'',
+        email:''
       }
     }
   },
@@ -125,73 +131,85 @@ export default {
       });
     },
     submit() {
+      console.log(this.active.login,this.active.register,1312)
       if (this.active.login) {
-        if(this.code === this.true_code){
+        if (this.code === this.true_code) {
           //先调自动登录接口
-          loginAuto(this.token).then(res => {
+          // loginAuto(this.token).then(res => {
+          //   console.log(res.data);
+          //   if(res.code===200){
+          //     this.$store.commit('user/saveToken', res.data.token)//保存新token
+          //   }else {//未登录则调登录接口
+          login(this.loginForm).then(res => {
             console.log(res.data);
-            if(res.code===200){
-              this.$store.commit('user/saveToken', res.data.token)//保存新token
-            }else {//未登录则调登录接口
-              login(this.loginForm).then(res => {
-                console.log(res.data);
-                if(res.code===500){
-                  this.errorMessage='该账号密码错误'
-                  this.alert();
-                }else if(res.code===200){
-                  //保存token
-                  this.$store.commit('user/saveToken', res.data.token)
-                  // this.$store.commit('user/saveLoginUser', res.data.uid)
-                  // Cookies.set('token',JSON.stringify(res.data))
-                  //跳转到主页
-                  this.$router.push('/home');
-                }
-              }).catch((err)=>{
-                console.log(err);
-              })}
-          }).catch((err)=>{
+            if (res.code === 500) {
+              this.errorMessage = '该账号密码错误'
+              this.alert();
+            } else if (res.code == 1) {
+              //保存token
+              // this.$store.commit('user/saveToken', res.data)
+
+              console.log(res.data,localStorage.getItem("token"),1704)
+              // console.log(r)
+              // this.$store.commit('user/saveLoginUser', res.data.uid)
+              // Cookies.set('token',JSON.stringify(res.data))
+
+              //跳转到主页
+              setTimeout(() => {
+                this.$router.push('/oldMen');
+
+                this.submitLoading = false
+              }, 700)
+              // this.$router.push('/oldMen');
+              this.$message.success("登录成功")
+              // this.$router.go(0)
+            }
+          }).catch((err) => {
             console.log(err);
           })
-          // login(this.loginForm).then(res => {
-          //   console.log(res.data);
-          //   if(res.code===500){
-          //     this.errorMessage='该账号密码错误'
-          //     this.alert();
-          //   }else if(res.code===200){
-          //     //保存token
-          //     this.$store.commit('user/saveToken', res.data.token)
-          //     // this.$store.commit('user/saveLoginUser', res.data.uid)
-          //     // Cookies.set('token',JSON.stringify(res.data))
-          //     //跳转到主页
-          //     this.$router.push('/home');
-          //   }
-          // }).catch((err)=>{
-          //   console.log(err);
-          // })
-        }else{
+        }
+        // }).catch((err)=>{
+        //   console.log(err);
+        // })
+
+        else{
           this.errorMessage='验证码输入错误';
           this.alert();
         }
       } else if (this.active.register) {
         if(this.code === this.true_code){
-          // request.post('/user/register',this.registerForm).then(res => {
-          //   console.log(res.data);
-          //   if(res.code===200){
-          //     this.successMessage='成功注册';
-          //     this.node();
-          //     this.go('login');
-          //   }else if(this.registerForm.user_name.length<5){
-          //     this.errorMessage='用户名不得小于5位'
-          //     this.alert();
-          //   }else if(this.registerForm.password.length<6){
-          //     this.errorMessage='密码不得小于6位';
-          //     this.alert();
-          //   }else if(res.code===500){
-          //     this.errorMessage=res.data.msg;
-          //     this.alert();
-          //   }
-          // }).catch((err)=>{
-          //   console.log(err);
+          register(this.registerForm).then(res => {
+            console.log(res.data);
+            if(res.code===200){
+              this.successMessage='成功注册';
+              this.node();
+              this.go('login');
+            // }else if(this.registerForm.user_name.length<5){
+            //   this.errorMessage='用户名不得小于5位'
+            //   this.alert();
+            // }else if(this.registerForm.password.length<6){
+            //   this.errorMessage='密码不得小于6位';
+            //   this.alert();
+            }else if(res.code===500){
+              this.errorMessage=res.data.msg;
+              this.alert();
+            }
+          }).catch((err)=>{
+            console.log(err);
+          })
+          // axios.post('http://2nugdm.natappfree.cc/user/admin/register', this.loginForm).then(response => {
+          //   this.$message({
+          //     type: 'success',
+          //     message: '注册成功',
+          //   });
+          //   console.log(response.data)
+          // }, error => {
+          //   this.$message({
+          //     type: 'warning',
+          //     message: 'ID重复，请重新输入',
+          //   });
+          //   console.log('错误', error.message)
+          //   // this.$router.go(0)
           // })
         }else{
           this.errorMessage='验证码输入错误';

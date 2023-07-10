@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table
-        :data="tableData"
+        :data="workerList"
         border
         style="width: 100%">
       <el-table-column
@@ -11,13 +11,13 @@
           align="center">
       </el-table-column>
       <el-table-column
-          prop="workerName"
+          prop="username"
           label="姓名"
           width="180"
           align="center">
       </el-table-column>
       <el-table-column
-          prop="sex"
+          prop="gender"
           label="性别"
           width="130"
           align="center">
@@ -46,43 +46,67 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handlePageChange"
+        :page-sizes="[10, 20, 50, 100, 500, 1000]"
+        :current-page="listForm.page"
+        :page-size="listForm.size"
+        :pagerCount="listForm.pagerCount"
+        :total="listForm.total"
+        layout="total, sizes, prev, pager, next, jumper"
+        style=" margin: auto">
+    </el-pagination>
     <i id="icon" class = "el-icon-circle-plus" @click = "addWorker"></i>
   </div>
 
 
 </template>
 <script>
+import {workerList} from "@/api/worker";
+
 export default {
   data() {
     return {
-      // tableData: []
-      tableData:[
-        {
-          id:'1',
-          workerName:'小李',
-          sex:'男',
-          phone:'1221111',
-          position:'护工'
-        },
-        {
-          id:'5',
-          workerName:'小李',
-          sex:'男',
-          phone:'1221111',
-          position:'维修工'
-        }
-      ]
+      listForm:{
+        page:1,
+        size:20,
+        total:0,
+        pagerCount:5,
+
+      },
+      workerList:[],
     }
   },
+  mounted() {
+    this.getWorkerList()
+  },
   methods:{
+    getWorkerList(){
+      workerList().then(res => {
+        this.workerList= res.data.records
+        this.listForm.total=res.data.records.length
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+
     //查看工作人员
     queryWorker:function(index){
-      this.$router.push('/workerMes')
+      // this.$router.push('/workerMes')
     },
     //增加工作人员
     addWorker:function(){
-      this.$router.push('/addWorker')
-    }
+      // this.$router.push('/addWorker')
+    },
+    handleSizeChange(value){
+      this.listForm.size = value;
+      this.getWorkerList()
+    },
+    handlePageChange(value){
+      this.listForm.page = value;
+      this.getWorkerList()
+    },
   }
 }
 </script>
