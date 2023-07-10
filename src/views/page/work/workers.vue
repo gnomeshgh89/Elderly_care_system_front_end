@@ -11,7 +11,7 @@
           align="center">
       </el-table-column>
       <el-table-column
-          prop="userName"
+          prop="username"
           label="姓名"
           width="180"
           align="center">
@@ -84,8 +84,8 @@ export default {
   methods:{
     getWorkerList(){
       workerList().then(res => {
-        this.elderList= res.data.records
-        this.listForm.total=res.data.total
+        this.workerList= res.data.records
+        this.listForm.total=res.data.records.length
       }).catch(error => {
         console.log(error)
       })

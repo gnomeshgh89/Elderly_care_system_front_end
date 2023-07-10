@@ -4,16 +4,16 @@ import store from '@/store'
 import router from '../router/index'
 const token = localStorage.getItem("token")
 
-const request = axios.create({
-    baseURL: 'http://kq543w.natappfree.cc',
+const service = axios.create({
+    baseURL: 'http://kxdsnu.natappfree.cc',
     timeout: 50000,
-    headers: {'Content-Type':'application/json;',}
+    headers: {'Authorization': token}
 })
 
 // request 拦截器
 // 可以自请求发送前对请求做一些处理
 // 比如统一加token，对请求参数统一加密
-request.interceptors.request.use(config => {
+service.interceptors.request.use(config => {
     // config.headers['Content-Type'] = 'application/json;charset=utf-8';
 
     // config.headers['token'] = user.token;  // 设置请求头
@@ -24,7 +24,7 @@ request.interceptors.request.use(config => {
 
 // response 拦截器
 // 可以在接口响应后统一处理结果
-request.interceptors.response.use(
+service.interceptors.response.use(
     response => {
         let res = response.data;
         // 兼容服务端返回的字符串数据
@@ -44,4 +44,4 @@ request.interceptors.response.use(
 )
 
 
-export default request
+export default service

@@ -11,7 +11,7 @@
           align="center">
       </el-table-column>
       <el-table-column
-          prop="userName"
+          prop="username"
           label="姓名"
           width="120"
           align="center">
@@ -46,7 +46,7 @@
           align="center">
         <template slot-scope="scope">
           <el-button  type="text" size="small" @click="viewMan(scope.row)">查看</el-button>
-          <el-button  type="text" size="small" @click="updateMan(scope.row)">查看</el-button>
+          <el-button  type="text" size="small" @click="updateMan(scope.row)">修改</el-button>
           <el-button  type="text" size="small" @click="delElder(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -64,13 +64,62 @@
     </el-pagination>
     <i id="icon" class = "el-icon-circle-plus" @click = "addOld"></i>
 
-    <old-mes v-if="oldMesVisible" ></old-mes>
+    <el-dialog title="老人信息详情" :visible.sync="oldMesVisible" width="900px">
+      <el-form ref="form" :model="form" label-width="140px"  >
+      <el-form-item label="姓名">
+        <el-input v-model="form.username" :disabled="true"></el-input>
+      </el-form-item>
+      <el-form-item label="性别">
+        <el-input v-model="form.gender" :disabled="true"></el-input>
+      </el-form-item>
+      <el-form-item label="电话" prop="phone">
+        <el-input v-model="form.phone"></el-input>
+      </el-form-item>
+<!--      <el-form-item label="身份证号" prop="ID">-->
+<!--        <el-input v-model="form.ID" :disabled="true"></el-input>-->
+<!--      </el-form-item>-->
+      <el-form-item label="生日">
+        <el-input v-model="form.birthday" :disabled="true"></el-input>
+      </el-form-item>
+      <el-form-item label="住址">
+        <el-input v-model="form.address"></el-input>
+      </el-form-item>
+      <el-form-item label="第一监护人姓名">
+        <el-input v-model="form.firstGuardianName"></el-input>
+      </el-form-item>
+      <el-form-item label="第一监护人电话">
+        <el-input v-model="form.firstGuardianPhone"></el-input>
+      </el-form-item>
+      <el-form-item label="第一监护人微信">
+        <el-input v-model="form.firstGuardianWechat"></el-input>
+      </el-form-item>
+      <el-form-item label="健康状态">
+        <el-input v-model="form.health_state"></el-input>
+      </el-form-item>
+      <el-form-item label="描述">
+        <el-input v-model="form.des"></el-input>
+      </el-form-item>
+      <el-form-item label="创建日期">
+        <el-input v-model="form.createTime" :disabled="true"></el-input>
+      </el-form-item>
+      <el-form-item label="创建人">
+        <el-input v-model="form.createName" :disabled="true"></el-input>
+      </el-form-item>
+
+      <el-form-item  style="width:100%;">
+        <el-button type="primary" @click="modify"  style="width:50%;margin-left:80px;margin-top:10px;border-color:#f88901;background-color: #F3CEAE">更改老人信息</el-button>
+      </el-form-item>
+      </el-form>
+    </el-dialog>
+
+
+<!--    <old-mes :oldMesVisible="oldMesVisible" ></old-mes>-->
   </div>
 
 </template>
 <script>
 import oldMes from "@/views/page/old/oldMes";
-import {deleteElder, elderList} from "@/api/elder";
+import {deleteElder, elderByID, elderList} from "@/api/elder";
 
 export default {
   components:{oldMes},
@@ -85,7 +134,31 @@ export default {
       },
       elderList:[],
       oldMesVisible:false,
-
+      oldMesTitle:'查看信息',
+      form:{
+        dialogImageUrl: "",
+        dialogVisible: false,
+        fileParam: "",
+        id:'',
+        username:'',
+        gender:'',
+        phone:'',
+        ID:'',
+        birthday: '',
+        address: '',
+        firstGuardianName: '',
+        firstGuardianPhone: '',
+        firstGuardianWechat: '',
+        guardian2_name: '',
+        guardian2_phone: '',
+        guardian2_wechat: '',
+        health_state:'',
+        des:'',
+        createTime:'',
+        createName:'',
+        updateTime:'',
+        updateName:'',
+      }
     }
   },
   mounted() {
@@ -94,13 +167,16 @@ export default {
   methods: {
     getElderList(){
       elderList().then(res => {
+
         this.elderList= res.data.records
-        this.listForm.total=res.data.total
+        this.listForm.total=res.data.records.length
       }).catch(error => {
         console.log(error)
       })
     },
     delElder(item){
+      console.log(item.id,1607)
+
       deleteElder(item.id).then(res => {
         this.$message("删除成功")
       }).catch(error => {
@@ -112,11 +188,23 @@ export default {
       // this.$router.push('/addOld')
     },
     //查看老人
-    viewMan(index){
+    viewMan(item){
+      this.oldMesTitle='查看信息'
       this.oldMesVisible=true
+
+
+      elderByID(item.id).then(res => {
+        console.log(this.oldMesVisible,1553)
+        this.form=res.data
+        // this.elderList= res.data.records
+        // this.listForm.total=res.data.records.length
+      }).catch(error => {
+        console.log(error)
+      })
       // this.$router.push('/oldMes')
     },
     updateMan(index){
+      this.oldMesTitle='修改信息'
       this.oldMesVisible=true
     },
     handleSizeChange(value){

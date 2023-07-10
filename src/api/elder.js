@@ -36,7 +36,7 @@ export function deleteElder(id) {
     return service({
         url: 'user/elder/remove/'+id,
         method: 'delete',
-        data: data
+        // data: data
     })
 }
 
