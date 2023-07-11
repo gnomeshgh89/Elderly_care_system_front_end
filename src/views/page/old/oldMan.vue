@@ -47,7 +47,7 @@
         <template slot-scope="scope">
           <el-button  type="text" size="small" @click="viewMan(scope.row)">查看</el-button>
           <el-button  type="text" size="small" @click="updateMan(scope.row)">修改</el-button>
-          <el-button  type="text" size="small" @click="delElder(scope.row)">删除</el-button>
+          <el-button  type="text" size="small" @click="confirmDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -123,6 +123,7 @@
 <script>
 import oldMes from "@/views/page/old/oldMes";
 import {addElder, deleteElder, elderByID, elderList, updateElder} from "@/api/elder";
+import {MessageBox} from "element-ui";
 
 export default {
   components:{oldMes},
@@ -171,7 +172,6 @@ export default {
   methods: {
     getElderList(){
       elderList().then(res => {
-
         this.elderList= res.data.records
         this.listForm.total=res.data.records.length
       }).catch(error => {
@@ -186,7 +186,21 @@ export default {
       }).catch(error => {
         console.log(error)
       })
-      this.getElderList()
+      location.reload();
+    },
+    //确认删除
+    confirmDelete(item) {
+      MessageBox.confirm('确定要删除吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+          .then(() => {
+            this.delElder(item);
+          })
+          .catch(() => {
+            // 用户点击了取消按钮，不执行删除操作
+          });
     },
     //添加老人
     add() {

@@ -18,14 +18,12 @@
           <el-date-picker type="date" placeholder="选择日期" format="yyyy-MM-dd"  value-format="yyyy-MM-dd" v-model="form.birthday" style="width: 100%;"></el-date-picker>
         </el-col>
       </el-form-item>
-      <el-form-item label="入职日期" prop="date_in">
-        <el-col :span="11">
-          <el-date-picker type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="form.hire_date"  style="width: 100%;"></el-date-picker>
-        </el-col>
-      </el-form-item>
 
-      <el-form-item label="职位"  prop="position">
-        <el-input v-model="form.position"></el-input>
+      <el-form-item label="职位"  prop="des">
+        <el-select v-model="form.des" placeholder="请选择您的职位">
+          <el-option label="护工" value="护工"></el-option>
+          <el-option label="维修工" value="维修工"></el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item label="工作人员电话"  prop="phone">
@@ -34,10 +32,6 @@
 
       <el-form-item label="工作人员身份证号" prop="ID">
         <el-input v-model="form.ID"></el-input>
-      </el-form-item>
-
-      <el-form-item label="描述" prop="des">
-        <el-input v-model="form.des"></el-input>
       </el-form-item>
 
       <el-form-item label="设置工作人员头像">
@@ -93,13 +87,11 @@ export default {
         fileList: [],
         dialogImageUrl: "",
         dialogVisible: false,
-        position:'',
       },
       rules:{
-        position:[{required: true, message: 'please enter your position', trigger: 'blur'}],
         name: [{required: true, message: 'please enter your name', trigger: 'blur'}],
         sex: [{required: true, message: 'please enter your sex', trigger: 'blur'}],
-        des: [{required: true, message: 'please enter your description', trigger: 'blur'}],
+        des: [{required: true, message: 'please enter your position', trigger: 'blur'}],
         birthday: [{required: true, message: 'please enter your birthday', trigger: 'blur'}],
         ID: [{required: true,validator:validateID ,  trigger: 'blur'}],
         phone: [{required: true,validator:validatePhone, trigger: 'blur'}],

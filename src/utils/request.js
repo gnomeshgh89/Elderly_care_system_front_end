@@ -3,9 +3,9 @@ import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import router from '../router/index'
 const token = localStorage.getItem("token")
-
+//18222634694，Liy1fan!
 const service = axios.create({
-    baseURL: 'http://gm9vxj.natappfree.cc',
+    baseURL: 'http://5d5xqs.natappfree.cc',
     timeout: 50000,
     headers: {'Authorization': token}
 })
