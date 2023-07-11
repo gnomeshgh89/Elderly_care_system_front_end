@@ -66,7 +66,6 @@
 <script>
 import request from "@/utils/request";
 import {login, loginAuto, register} from "@/api/user";
-import axios from "axios";
 
 export default {
   name: "Login.vue",
@@ -173,7 +172,7 @@ export default {
         // })
 
         else{
-          this.errorMessage='验证码输入错误';
+          this.errorMessage='密码输入错误';
           this.alert();
         }
       } else if (this.active.register) {
@@ -197,20 +196,6 @@ export default {
           }).catch((err)=>{
             console.log(err);
           })
-          // axios.post('http://2nugdm.natappfree.cc/user/admin/register', this.loginForm).then(response => {
-          //   this.$message({
-          //     type: 'success',
-          //     message: '注册成功',
-          //   });
-          //   console.log(response.data)
-          // }, error => {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: 'ID重复，请重新输入',
-          //   });
-          //   console.log('错误', error.message)
-          //   // this.$router.go(0)
-          // })
         }else{
           this.errorMessage='验证码输入错误';
           this.alert();

@@ -36,7 +36,7 @@ export function deleteWorker(id) {
     return service({
         url: 'user/staff/remove/'+id,
         method: 'delete',
-        data: data
+        // data: data
     })
 }
 

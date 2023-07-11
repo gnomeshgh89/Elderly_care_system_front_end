@@ -7,10 +7,10 @@
         <el-input v-model="form.id" :disabled="true"></el-input>
       </el-form-item>
       <el-form-item label="姓名">
-        <el-input v-model="form.workerName" :disabled="true"></el-input>
+        <el-input v-model="form.username" :disabled="true"></el-input>
       </el-form-item>
       <el-form-item label="性别">
-        <el-input v-model="form.sex" :disabled="true"></el-input>
+        <el-input v-model="form.gender" :disabled="true"></el-input>
       </el-form-item>
       <el-form-item label="职位" prop="position">
         <el-input v-model="form.position"></el-input>
@@ -18,17 +18,14 @@
       <el-form-item label="电话" prop="phone">
         <el-input v-model="form.phone"></el-input>
       </el-form-item>
-      <el-form-item label="身份证号" prop="ID">
-        <el-input v-model="form.ID" :disabled="true"></el-input>
-      </el-form-item>
+<!--      <el-form-item label="身份证号" prop="ID">-->
+<!--        <el-input v-model="form.id" :disabled="true"></el-input>-->
+<!--      </el-form-item>-->
       <el-form-item label="生日">
         <el-input v-model="form.birthday"></el-input>
       </el-form-item>
       <el-form-item label="入职日期">
         <el-input v-model="form.hire_date"></el-input>
-      </el-form-item>
-      <el-form-item label="描述">
-        <el-input v-model="form.des"></el-input>
       </el-form-item>
 
       <el-form-item label="头像">
@@ -81,18 +78,17 @@
           dialogVisible: false,
 
           id:'',
-          workerName: '',
-          sex :'',
+          username: '',
+          gender :'',
           phone :'',
           ID:'',
           birthday:'',
           hire_date:'',
           resign_date:'',
-          des:'',
+          position:'',
           createTime:'',
           createName:'',
           fileParam: "",
-          position:'',
         },
         rules:{
           ID: [{validator:validateID ,  trigger: 'blur'}],
