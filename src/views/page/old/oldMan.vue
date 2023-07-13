@@ -67,19 +67,19 @@
     <el-dialog :title="oldMesTitle" :visible.sync="oldMesVisible" width="900px">
       <el-form ref="form" :model="form" label-width="140px"  >
         <el-form-item label="姓名">
-          <el-input v-model="form.username" :disabled="true"></el-input>
+          <el-input v-model="form.username" ></el-input>
         </el-form-item>
         <el-form-item label="性别">
-          <el-input v-model="form.gender" :disabled="true"></el-input>
+          <el-input v-model="form.gender" ></el-input>
         </el-form-item>
         <el-form-item label="电话" prop="phone">
           <el-input v-model="form.phone"></el-input>
         </el-form-item>
         <el-form-item label="身份证号" prop="ID">
-          <el-input v-model="form.id_card" :disabled="true"></el-input>
+          <el-input v-model="form.id_card" ></el-input>
         </el-form-item>
         <el-form-item label="生日">
-          <el-input v-model="form.birthday" :disabled="true"></el-input>
+          <el-input v-model="form.birthday" ></el-input>
         </el-form-item>
         <el-form-item label="住址">
           <el-input v-model="form.address"></el-input>
@@ -100,10 +100,10 @@
           <el-input v-model="form.des"></el-input>
         </el-form-item>
         <el-form-item label="创建日期">
-          <el-input v-model="form.createTime" :disabled="true"></el-input>
+          <el-input v-model="form.createTime" ></el-input>
         </el-form-item>
         <el-form-item label="创建人">
-          <el-input v-model="form.createName" :disabled="true"></el-input>
+          <el-input v-model="form.createName" ></el-input>
         </el-form-item>
 
         <el-form-item  style="width:100%;" v-if="oldMesType===2">

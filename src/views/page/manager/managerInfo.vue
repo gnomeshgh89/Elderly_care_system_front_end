@@ -45,6 +45,8 @@
 </template>
 <script>
 
+import {getAdminInfo} from "@/api/user";
+
 export default {
   data() {
     return {
@@ -63,10 +65,22 @@ export default {
       },
     }
   },
+  mounted() {
+    this.getAdminInfo()
+  },
   methods: {
     modify() {
       this.$router.push('/home')
-    }
+    },
+    getAdminInfo(){
+      getAdminInfo().then(res => {
+        this.form= res.data
+        // this.listForm.total=res.data.records.length
+
+      }).catch(error => {
+        console.log(error)
+      })
+    },
   }
 }
 </script>

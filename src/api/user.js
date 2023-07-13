@@ -23,3 +23,12 @@ export function login(data) {
         data: data
     })
 }
+
+
+export function getAdminInfo() {
+    return service({
+        url: 'user/admin/insight',
+        method: 'get',
+
+    })
+}

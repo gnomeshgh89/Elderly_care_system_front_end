@@ -44,6 +44,6 @@ export function elderCounts() {
     return service({
         url: 'user/elder/counts',
         method: 'get',
-        data: data
+
     })
 }
