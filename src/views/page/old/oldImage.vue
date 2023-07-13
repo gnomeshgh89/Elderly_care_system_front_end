@@ -5,16 +5,16 @@
     <div class = example style="width:210px;height:170px;margin-left:20px;margin-top:15px;">
       <img src="./old.png" width="50" height="50" style="float:left;padding-top: 8px;padding-left: 5px;" v-image-preview/>
       <p style=" font-weight: bold;font-size:20px;font-style: italic;padding-top: 22px;">老人总数</p>
-      <p><div style=" font-weight: bold;font-size:30px;font-style: italic;padding-top: 22px;padding-left: 80px;">8人</div>
+      <p><div style=" font-weight: bold;font-size:30px;font-style: italic;padding-top: 22px;padding-left: 80px;">{{oldCounts.totalCount}}人</div>
     </div>
     <div class = example style="width:210px;height:170px;position: absolute;left: 540px;top: 120px;">
       <img src="./oldman.png" width="50" height="50" style="float:left;padding-top: 15px;padding-left:20px;" v-image-preview/>
       <p style=" font-weight: bold;font-size:20px;font-style: italic;padding-top: 22px;padding-left: 12px;">男性人数</p>
-      <p><div style=" font-weight: bold;font-size:20px;font-style: italic;padding-left: 90px;">3人</div>
+      <p><div style=" font-weight: bold;font-size:20px;font-style: italic;padding-left: 90px;">{{oldCounts.maleCount}}人</div>
 
       <img src="./oldwoman.png" width="50" height="50" style="float:left;padding-top: 20px;padding-left: 20px;" v-image-preview/>
       <p style=" font-weight: bold;font-size:20px;font-style: italic;padding-top: 22px;padding-left: 12px;">女性人数</p>
-      <p><div style=" font-weight: bold;font-size:20px;font-style: italic;padding-left: 90px;">5人</div>
+      <p><div style=" font-weight: bold;font-size:20px;font-style: italic;padding-left: 90px;">{{oldCounts.femaleCount}}人</div>
     </div>
     <div class = example style="width:210px;height:170px;position: absolute;left: 810px;top: 120px;">
       <img src="./oldman.png" width="50" height="50" style="float:left;padding-top: 15px;padding-left:20px;" v-image-preview/>
@@ -43,20 +43,33 @@
 
 <script>
 import * as echarts from 'echarts';
+import {elderCounts} from "@/api/elder";
 require('echarts/theme/macarons');//引入主题
 
 export default {
   data() {
     return {
-      chartPie: null
+      chartPie: null,
+      oldCounts:[],
     }
   },
   mounted() {
+    this.getOldCounts()
     this.$nextTick(() => {
       this.drawPieChart();
     })
   },
   methods: {
+    getOldCounts(){
+      elderCounts().then(res => {
+        this.oldCounts= res.data
+        // this.listForm.total=res.data.records.length
+
+      }).catch(error => {
+        console.log(error)
+      })
+
+    },
     drawPieChart() {
       let mytextStyle = {
         color: "#333",
