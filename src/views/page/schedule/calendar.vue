@@ -53,7 +53,7 @@
                 </el-form-item>
                 <el-form-item label="请输入日程内容" >
                   <el-col span='17'>
-                    <el-input v-model="form.name" autocomplete="off"></el-input>
+                    <el-input v-model="form.title" autocomplete="off"></el-input>
                   </el-col>
                 </el-form-item>
 
@@ -133,6 +133,8 @@
 </template>
 
 <script>
+import {addSchedule} from "@/api/schedule";
+
 export default {
 
   name: "PatrolSchedule",
@@ -179,7 +181,7 @@ export default {
       form: {
         date:'',
         type:'',
-        name:'',
+        title:'',
       },
 
     };
@@ -198,7 +200,13 @@ export default {
     handleClick(row) {
       console.log(row);
     },
-    add:function(){
+    add(){
+      addSchedule(this.form).then(res => {
+        this.$message.success("添加成功")
+
+      }).catch(error => {
+        console.log(error)
+      })
       //添加成功后，执行这一步
       this.dialogFormVisible=false
     },
