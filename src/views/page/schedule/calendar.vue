@@ -204,7 +204,7 @@ export default {
           // },
       ],
       form: {
-        day:'',
+        date:'',
         type:'',
         title:'',
       },

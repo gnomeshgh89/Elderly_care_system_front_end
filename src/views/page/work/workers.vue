@@ -48,7 +48,7 @@
           <el-button  type="text" size="small" @click.native.prevent="queryWorker(scope.row)" >查看</el-button>
           <el-button  type="text" size="small" @click.native.prevent="updateWorker(scope.row)" >修改</el-button>
           <el-button type="text" size="small" @click.native.prevent="confirmDelete(scope.row)">删除</el-button>
-          <el-button type="text" size="small" @click="workerFace(scope.row)">删除</el-button>
+          <el-button type="text" size="small" @click="workerFace(scope.row)">上传人脸采集</el-button>
         </template>
       </el-table-column>
     </el-table>

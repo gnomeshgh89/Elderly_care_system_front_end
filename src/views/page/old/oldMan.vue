@@ -51,6 +51,7 @@
           <el-button  type="text" size="small" @click="viewMan(scope.row)">查看</el-button>
           <el-button  type="text" size="small" @click="updateMan(scope.row)">修改</el-button>
           <el-button type="text" size="small" @click="old_face(scope.row)">上传人脸采集</el-button>
+          <el-button  type="text" size="small" @click="addDate(scope.row)">新增日程</el-button>
           <el-button  type="text" size="small" @click="confirmDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -68,6 +69,37 @@
     </el-pagination>
     <i id="icon" class = "el-icon-circle-plus" @click = "add()"></i>
 
+    <el-dialog title="增加日程" :visible.sync="dialogFormVisible" width='600px' style="padding-bottom: 0px;padding-top: 10px;">
+      <el-form :model="calendarForm">
+
+        <el-form-item label="请选择日程日期" prop="date">
+          <el-col span='11'>
+            <el-date-picker type="date" placeholder="选择日期" format="yyyy-MM-dd"  value-format="yyyy-MM-dd" v-model="calendarForm.date" style="width: 100%;"></el-date-picker>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="请输入完成人选" prop="type">
+          <el-col span='11'>
+            <el-select v-model="calendarForm.type" placeholder="请选择人选">
+              <el-option label="老人" value="1"></el-option>
+<!--              <el-option label="护工" value="2"></el-option>-->
+<!--              <el-option label="维修人员" value="3"></el-option>-->
+              <el-option label="探望" value="4"></el-option>
+            </el-select>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="请输入日程内容" >
+          <el-col span='17'>
+            <el-input v-model="calendarForm.title" autocomplete="off"></el-input>
+          </el-col>
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addCalendar()" style="border-color:#f88901;background-color: #F3CEAE">确 定</el-button>
+      </div>
+    </el-dialog>
+
     <el-dialog :title="oldMesTitle" :visible.sync="oldMesVisible" width="900px">
       <el-form ref="form" :model="form" label-width="140px"  >
         <el-form-item label="姓名">
@@ -76,7 +108,7 @@
         <el-form-item label="性别">
           <el-select v-model="form.gender" >
             <el-option
-                v-for="item in genderOption"
+                v-for="item in genderOptions"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -145,6 +177,7 @@
 
 import {addElder, deleteElder, elderByID, elderList, updateElder} from "@/api/elder";
 import {MessageBox} from "element-ui";
+import {addOldSchedule, addSchedule} from "@/api/schedule";
 
 export default {
   // components:{oldMes},
@@ -168,7 +201,9 @@ export default {
       gender:['女','男'],
       oldMesVisible:false,
       oldMesTitle:'查看老人信息',
+      selectedOld:0,
       oldMesType:1,//1仅查看2修改3新增
+      dialogFormVisible:false,
       form:{
         dialogImageUrl: "",
         dialogVisible: false,
@@ -192,7 +227,12 @@ export default {
         createName:'',
         updateTime:'',
         updateName:'',
-      }
+      },
+      calendarForm: {
+        date:'',
+        type:'',
+        title:'',
+      },
     }
   },
   mounted() {
@@ -212,6 +252,24 @@ export default {
           })
 
 //          this.$router.push('/old_face')
+    },
+    addDate(item){
+      addOldSchedule(item.id).then(res => {
+       this.dialogFormVisible=true
+      }).catch(error => {
+        console.log(error)
+      })
+
+    },
+    addCalendar(){
+      addSchedule(this.calendarForm).then(res => {
+        this.$message.success("添加成功")
+
+      }).catch(error => {
+        console.log(error)
+      })
+      //添加成功后，执行这一步
+      this.dialogFormVisible=false
     },
     getElderList(){
       elderList().then(res => {

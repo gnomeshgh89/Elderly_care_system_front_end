@@ -115,7 +115,7 @@ const routes = [
             {
                 //突发情况
                 path: '/w_face',
-                component: () => import('../views/page/worker/workerFace.vue'),
+                component: () => import('../views/page/work/workerFace.vue'),
                 meta: { auth: true, title: '人脸采集' }
             },
         ]
