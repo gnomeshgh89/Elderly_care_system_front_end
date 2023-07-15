@@ -11,11 +11,13 @@ import store from "@/store";
 
 Vue.config.productionTip = false
 Vue.prototype.$message = Message;
+Vue.prototype.$axios = axios
 Vue.use(ElementUI,{size:'small'});//small medium mini
 
 new Vue({
   router,
   store,
+  axios,
   render: h => h(App)
 }).$mount('#app')
 

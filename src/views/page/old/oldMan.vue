@@ -50,6 +50,7 @@
         <template slot-scope="scope">
           <el-button  type="text" size="small" @click="viewMan(scope.row)">查看</el-button>
           <el-button  type="text" size="small" @click="updateMan(scope.row)">修改</el-button>
+          <el-button type="text" size="small" @click="old_face(scope.row)">上传人脸采集</el-button>
           <el-button  type="text" size="small" @click="confirmDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -115,17 +116,17 @@
         <el-form-item label="创建人">
           <el-input v-model="form.createName" ></el-input>
         </el-form-item>
-        <el-form-item label="设置老人头像">
-          <div>
-<!--            <el-upload v-model="form.fileList" list-type="picture-card">-->
-<!--              <i class="el-icon-plus"></i>-->
-<!--            </el-upload>-->
-<!--            <el-dialog v-model="form.dialogVisible">-->
-<!--              <img width="100%" :src="form.dialogImageUrl" alt="" />-->
-<!--            </el-dialog>-->
-            <el-button>上传人脸采集</el-button>
-          </div>
-        </el-form-item>
+<!--        <el-form-item label="设置老人头像">-->
+<!--          <div>-->
+<!--&lt;!&ndash;            <el-upload v-model="form.fileList" list-type="picture-card">&ndash;&gt;-->
+<!--&lt;!&ndash;              <i class="el-icon-plus"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;            </el-upload>&ndash;&gt;-->
+<!--&lt;!&ndash;            <el-dialog v-model="form.dialogVisible">&ndash;&gt;-->
+<!--&lt;!&ndash;              <img width="100%" :src="form.dialogImageUrl" alt="" />&ndash;&gt;-->
+<!--&lt;!&ndash;            </el-dialog>&ndash;&gt;-->
+<!--            <el-button @click="old_face()">上传人脸采集</el-button>-->
+<!--          </div>-->
+<!--        </el-form-item>-->
         <el-form-item  style="width:100%;" v-if="oldMesType===2">
           <el-button type="primary" @click="updateOld()"  style="width:50%;margin-left:80px;margin-top:10px;border-color:#f88901;background-color: #F3CEAE">更改老人信息</el-button>
         </el-form-item>
@@ -198,12 +199,31 @@ export default {
     this.getElderList()
   },
   methods: {
+    //录入人脸
+    old_face(item){
+      // alert(this.tableData[index].id)
+      var id = item.id
+      //通过id向后端获取老人数据
+      localStorage.setItem("old_id",id)
+      this.$router.push('/old_face')
+      this.$axios.get("http://127.0.0.1:5001/faceCollectOld",{id:id})
+          .then(res =>{
+            localStorage.setItem("old_face",JSON.stringify(res))
+          })
+
+//          this.$router.push('/old_face')
+    },
     getElderList(){
       elderList().then(res => {
         this.elderList= res.data.records
         this.listForm.total=res.data.records.length
       }).catch(error => {
         console.log(error)
+      })
+      this.$nextTick(() => {
+        if (this.$refs.el_table && this.$refs.el_table.doLayout) {
+          this.$refs.el_table.doLayout();
+        }
       })
     },
     delElder(item){
