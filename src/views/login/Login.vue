@@ -159,9 +159,10 @@ export default {
 
                 this.submitLoading = false
               }, 700)
+              // this.$router.go(0)
               // this.$router.push('/oldMen');
               this.$message.success("登录成功")
-              // this.$router.go(0)
+
             }
           }).catch((err) => {
             console.log(err);

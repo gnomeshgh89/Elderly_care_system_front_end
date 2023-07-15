@@ -116,6 +116,12 @@ const routes = [
                 component:() =>import('../views/page/record/emergencies.vue'),
                 meta: {auth: true, title: '突发情况' }
             },
+            {
+                //突发情况
+                path:'/old_face',
+                component:() =>import('../views/page/old/old_face.vue'),
+                meta: {auth: true, title: '人脸采集' }
+            },
         ]
     }
 ]
