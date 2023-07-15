@@ -23,3 +23,11 @@ export function addSchedule(data) {
         data: data
     })
 }
+
+export function getScheduleAll(month) {
+    return service({
+        url: 'schedule/insight'+'/2023/'+month,
+        method: 'get',
+
+    })
+}

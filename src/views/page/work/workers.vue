@@ -48,6 +48,7 @@
           <el-button  type="text" size="small" @click.native.prevent="queryWorker(scope.row)" >查看</el-button>
           <el-button  type="text" size="small" @click.native.prevent="updateWorker(scope.row)" >修改</el-button>
           <el-button type="text" size="small" @click.native.prevent="confirmDelete(scope.row)">删除</el-button>
+          <el-button type="text" size="small" @click="workerFace(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -214,6 +215,17 @@ export default {
     this.getWorkerList()
   },
   methods:{
+    workerFace(item){
+      var id = item.id
+      console.log(id)
+      //通过id向后端获取工作人员数据
+      localStorage.setItem("id",id)
+      this.$router.push('/w_face')
+      this.$axios.post("http://127.0.0.1:5000/faceCollectemp",{id:id})
+          .then(res =>{
+            localStorage.setItem("w_face",JSON.stringify(res))
+          })
+    },
     getWorkerList(){
       workerList().then(res => {
         this.workerList= res.data.records

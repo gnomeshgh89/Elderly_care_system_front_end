@@ -73,9 +73,6 @@ export default {
   },
   mounted() {
     this.getOldCounts()
-    this.$nextTick(() => {
-      this.drawPieChart();
-    })
   },
   methods: {
     getOldCounts(){
@@ -86,6 +83,7 @@ export default {
         this.hundredW=res.data.femaleSlicedBy20Years.HUNDRED
         this.eightyM=res.data.maleSlicedBy20Years.EIGHTY
         this.eightyW=res.data.femaleSlicedBy20Years.EIGHTY
+        this.drawPieChart();
       }).catch(error => {
         console.log(error)
       })

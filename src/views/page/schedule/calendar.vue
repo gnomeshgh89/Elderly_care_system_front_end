@@ -133,50 +133,75 @@
 </template>
 
 <script>
-import {addSchedule} from "@/api/schedule";
+import {addSchedule, getScheduleAll} from "@/api/schedule";
 
 export default {
 
   name: "PatrolSchedule",
   components: {},
+  mounted() {
+    this.getData();
+    this.$nextTick(() => {
+      // 点击前一个月
+      let prevBtn = document.querySelector(
+          ".el-calendar__button-group .el-button-group>button:nth-child(1)"
+      );
+      prevBtn.addEventListener("click", () => {
+        this.judgeDate();
+      });
+      let dayBtn = document.querySelector(
+          ".el-calendar__button-group .el-button-group>button:nth-child(2)"
+      );
+      dayBtn.addEventListener("click", () => {
+        this.judgeDate();
+      });
+      let nextBtn = document.querySelector(
+          ".el-calendar__button-group .el-button-group>button:nth-child(3)"
+      );
+      nextBtn.addEventListener("click", () => {
+        this.judgeDate();
+      });
+    });
+  },
   data() {
     // var schedule = JSON.parse(localStorage.getItem('calendar')||'[]')
     return {
       dialogFormVisible: false,
       formLabelWidth: '120px',
       value: new Date(),
+      selectMonth:'07',
       // scheduleData: [],
       scheduleData:[
-          {
-              date: "02",
-              name: "张三老人特别关注",
-              type:1
-          },
-          {
-              date: "03",
-              name:  "护工去往李四老人家",
-              type:2
-          },
-          {
-              date: "04",
-              name:  "维修工去往王五家修设备",
-              type:3
-          },
-          {
-              date: "05",
-              name:  "探望爱心活动去往刘六",
-              type:4
-          },
-          {
-              date: "06",
-              name:  "李四老人特别关注",
-              type:1
-          },
-          {
-              date: "07",
-              name:  "张三老人特别关注",
-              type:1
-          },
+          // {
+          //     date: "02",
+          //     name: "张三老人特别关注",
+          //     type:1
+          // },
+          // {
+          //     date: "03",
+          //     name:  "护工去往李四老人家",
+          //     type:2
+          // },
+          // {
+          //     date: "04",
+          //     name:  "维修工去往王五家修设备",
+          //     type:3
+          // },
+          // {
+          //     date: "05",
+          //     name:  "探望爱心活动去往刘六",
+          //     type:4
+          // },
+          // {
+          //     date: "06",
+          //     name:  "李四老人特别关注",
+          //     type:1
+          // },
+          // {
+          //     date: "07",
+          //     name:  "张三老人特别关注",
+          //     type:1
+          // },
       ],
       form: {
         date:'',
@@ -192,7 +217,20 @@ export default {
   },
   methods: {
     getData(){
-
+      getScheduleAll(this.selectMonth).then(res => {
+        this.$message.success("获取成功")
+        this.scheduleData=res.data
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    judgeDate(){
+      let d = new Date(this.value);
+      if (this.year != d.getFullYear()) {
+        this.year = d.getFullYear();
+        this.selectMonth = d.getMonth();
+        this.getData()
+      }
     },
     click(){
       console.log(this.scheduleData)
