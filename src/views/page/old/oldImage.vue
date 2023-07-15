@@ -19,20 +19,20 @@
     <div class = example style="width:210px;height:170px;position: absolute;left: 810px;top: 120px;">
       <img src="./oldman.png" width="50" height="50" style="float:left;padding-top: 15px;padding-left:20px;" v-image-preview/>
       <p style=" font-weight: bold;font-size:20px;font-style: italic;padding-top: 22px;padding-left: 12px;">[80-100]人数</p>
-      <p><div style=" font-weight: bold;font-size:20px;font-style: italic;padding-left: 90px;">1人</div>
+      <p><div style=" font-weight: bold;font-size:20px;font-style: italic;padding-left: 90px;">{{oldCounts.femaleSlicedBy20Years.HUNDRED}}人</div>
 
       <img src="./oldwoman.png" width="50" height="50" style="float:left;padding-top: 20px;padding-left: 20px;" v-image-preview/>
       <p style=" font-weight: bold;font-size:20px;font-style: italic;padding-top: 22px;padding-left: 12px;">[80-100]人数</p>
-      <p><div style=" font-weight: bold;font-size:20px;font-style: italic;padding-left: 90px;">2人</div>
+      <p><div style=" font-weight: bold;font-size:20px;font-style: italic;padding-left: 90px;">{{oldCounts.maleSlicedBy20Years.HUNDRED}}人</div>
     </div>
     <div class = example style="width:210px;height:170px;position: absolute;left: 1080px;top: 120px;">
       <img src="./oldman.png" width="50" height="50" style="float:left;padding-top: 15px;padding-left:20px;" v-image-preview/>
       <p style=" font-weight: bold;font-size:20px;font-style: italic;padding-top: 22px;padding-left: 12px;">[60-80]人数</p>
-      <p><div style=" font-weight: bold;font-size:20px;font-style: italic;padding-left: 90px;">2人</div>
+      <p><div style=" font-weight: bold;font-size:20px;font-style: italic;padding-left: 90px;">{{oldCounts.maleSlicedBy20Years.EIGHTY}}人</div>
 
       <img src="./oldwoman.png" width="50" height="50" style="float:left;padding-top: 20px;padding-left: 20px;" v-image-preview/>
       <p style=" font-weight: bold;font-size:20px;font-style: italic;padding-top: 22px;padding-left: 12px;">[60-80]人数</p>
-      <p><div style=" font-weight: bold;font-size:20px;font-style: italic;padding-left: 90px;">2人</div>
+      <p><div style=" font-weight: bold;font-size:20px;font-style: italic;padding-left: 90px;">{{oldCounts.femaleSlicedBy20Years.EIGHTY}}人</div>
     </div>
     <div>
       <h2 style="margin-left:10px;margin-top:15px">老人年龄分析图</h2><br>
@@ -50,7 +50,25 @@ export default {
   data() {
     return {
       chartPie: null,
-      oldCounts:[],
+      oldCounts: {
+
+        maleSlicedBy20Years: {
+          HUNDRED:0,
+          EIGHTY:0,
+        },
+        femaleSlicedBy20Years: {
+          HUNDRED:0,
+          EIGHTY:0,
+        },
+      },
+      total:0,
+      totalW:0,
+      totalM:0,
+      hundredW:0,
+      hundredM:0,
+      eightyW:0,
+      eightyM:0,
+      other:0,
     }
   },
   mounted() {
@@ -64,7 +82,10 @@ export default {
       elderCounts().then(res => {
         this.oldCounts= res.data
         // this.listForm.total=res.data.records.length
-
+        this.hundredM=res.data.maleSlicedBy20Years.HUNDRED
+        this.hundredW=res.data.femaleSlicedBy20Years.HUNDRED
+        this.eightyM=res.data.maleSlicedBy20Years.EIGHTY
+        this.eightyW=res.data.femaleSlicedBy20Years.EIGHTY
       }).catch(error => {
         console.log(error)
       })
@@ -106,11 +127,11 @@ export default {
             radius: ['50%', '70%'],
             center: ['50%', '50%'],
             data: [
-              {value: 1, name: '百岁老人'},
-              {value: 1, name: '男性80-100'},
-              {value: 2, name: '男性60-80'},
-              {value: 2, name: '女性80-100'},
-              {value: 2, name: '女性60-80'}
+              // {value: 1, name: '百岁老人'},
+              {value: this.hundredM, name: '男性80-100'},
+              {value: this.eightyM, name: '男性60-80'},
+              {value: this.hundredW, name: '女性80-100'},
+              {value: this.eightyW, name: '女性60-80'}
             ],
             animationEasing: 'cubicInOut',
             //图像显示的速度

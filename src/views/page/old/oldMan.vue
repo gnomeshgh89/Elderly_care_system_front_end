@@ -17,10 +17,13 @@
           align="center">
       </el-table-column>
       <el-table-column
-          prop="gender"
+
           label="性别"
           width="70"
           align="center">
+        <template slot-scope="scope">
+          <span>{{gender[scope.row.gender]}}</span>
+        </template>
       </el-table-column>
       <el-table-column
           prop="phone"
@@ -70,7 +73,14 @@
           <el-input v-model="form.username" ></el-input>
         </el-form-item>
         <el-form-item label="性别">
-          <el-input v-model="form.gender" ></el-input>
+          <el-select v-model="form.gender" >
+            <el-option
+                v-for="item in genderOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="电话" prop="phone">
           <el-input v-model="form.phone"></el-input>
@@ -105,7 +115,17 @@
         <el-form-item label="创建人">
           <el-input v-model="form.createName" ></el-input>
         </el-form-item>
-
+        <el-form-item label="设置老人头像">
+          <div>
+<!--            <el-upload v-model="form.fileList" list-type="picture-card">-->
+<!--              <i class="el-icon-plus"></i>-->
+<!--            </el-upload>-->
+<!--            <el-dialog v-model="form.dialogVisible">-->
+<!--              <img width="100%" :src="form.dialogImageUrl" alt="" />-->
+<!--            </el-dialog>-->
+            <el-button>上传人脸采集</el-button>
+          </div>
+        </el-form-item>
         <el-form-item  style="width:100%;" v-if="oldMesType===2">
           <el-button type="primary" @click="updateOld()"  style="width:50%;margin-left:80px;margin-top:10px;border-color:#f88901;background-color: #F3CEAE">更改老人信息</el-button>
         </el-form-item>
@@ -136,7 +156,15 @@ export default {
         pagerCount:5,
 
       },
+      genderOptions: [{
+        value: '0',
+        label: '女'
+      }, {
+        value: '1',
+        label: '男'
+      }],
       elderList:[],
+      gender:['女','男'],
       oldMesVisible:false,
       oldMesTitle:'查看老人信息',
       oldMesType:1,//1仅查看2修改3新增
