@@ -142,12 +142,12 @@
 
 </template>
 <script>
-import oldMes from "@/views/page/old/oldMes";
+
 import {addElder, deleteElder, elderByID, elderList, updateElder} from "@/api/elder";
 import {MessageBox} from "element-ui";
 
 export default {
-  components:{oldMes},
+  // components:{oldMes},
   data(){
     return{
       listForm:{

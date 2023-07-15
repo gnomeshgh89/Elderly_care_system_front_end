@@ -24,24 +24,14 @@ const routes = [
                 component: () => import('../views/page/old/oldMan.vue'),
                 meta: { auth: true,title: '老人列表'}
             },
-            // {
-            //     //添加老人
-            //     path:'/addOld',
-            //     component:() =>import('../views/page/old/addOld.vue'),
-            //     meta: {auth: true, title: '添加老人' }
-            // },
+
             {
                 // 老人统计分析图
                 path:'/oldImage',
                 component:() =>import('../views/page/old/oldImage.vue'),
                 meta:{auth: true,title:'老人统计分析图'}
             },
-            // {
-            //     //查看具体老人信息
-            //     path:'/oldMes',
-            //     component:() =>import('../views/page/old/oldMes.vue'),
-            //     meta: {auth: true, title: '查看老人信息' }
-            // },
+
             {
                 //查看管理员信息
                 path:'/managerInfo',

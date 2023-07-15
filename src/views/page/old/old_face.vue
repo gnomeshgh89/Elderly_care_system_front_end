@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div >
 
       <img :src=url v-image-preview/>
     </div>
