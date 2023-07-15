@@ -79,44 +79,44 @@
               {{ data.day.split('-')[2]}}
             </div>
             <div style="width:100%;" v-for="item in scheduleData" :key="item">
-              <div style="margin: 0 10px;width:120px" v-if="item.type=='1' &&data.day.split('-')[1]==7&&(item.date).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
+              <div style="margin: 0 10px;width:120px" v-if="item.type=='1' &&data.day.split('-')[1]==7&&(item.day).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
 
                 <div class="green-cycle" style="float: left;"></div>
                 <div style=" font-size:13px;letter-spacing:2px">
-                  {{item.name}}
+                  {{item.title}}
 <!--                  <el-button icon="el-icon-delete-solid" type="text" class="delete-button"></el-button>-->
                 </div>
-                <div class="delete-button-container" v-if="item.type=='1' && data.day.split('-')[1]==7 && (item.date).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
+                <div class="delete-button-container" v-if="item.type=='1' && data.day.split('-')[1]==7 && (item.day).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
                   <el-button icon="el-icon-delete-solid" type="text" class="delete-button"  @click="delete_c()"></el-button>
                 </div>
               </div>
-              <div style="margin: 0 10px;width:120px" v-if="item.type=='2' &&data.day.split('-')[1]==7&&(item.date).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
+              <div style="margin: 0 10px;width:120px" v-if="item.type=='2' &&data.day.split('-')[1]==7&&(item.day).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
 
                 <div class="orange-cycle" style="float: left;"></div>
                 <div style=" font-size:13px;letter-spacing:2px">
-                  {{item.name}}
+                  {{item.title}}
                 </div>
-                <div class="delete-button-container" v-if="item.type=='2' && data.day.split('-')[1]==7 && (item.date).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
+                <div class="delete-button-container" v-if="item.type=='2' && data.day.split('-')[1]==7 && (item.day).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
                   <el-button icon="el-icon-delete-solid" type="text" class="delete-button"  @click="delete_c()"></el-button>
                 </div>
               </div>
-              <div style="margin: 0 10px;width:120px" v-if="item.type=='3' &&data.day.split('-')[1]==7&&(item.date).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
+              <div style="margin: 0 10px;width:120px" v-if="item.type=='3' &&data.day.split('-')[1]==7&&(item.day).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
 
                 <div class="blue-cycle" style="float: left;"></div>
                 <div style="font-size:13px;letter-spacing:2px">
-                  {{item.name}}
+                  {{item.title}}
                 </div>
-                <div class="delete-button-container" v-if="item.type=='3' && data.day.split('-')[1]==7 && (item.date).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
+                <div class="delete-button-container" v-if="item.type=='3' && data.day.split('-')[1]==7 && (item.day).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
                   <el-button icon="el-icon-delete-solid" type="text" class="delete-button"  @click="delete_c()"></el-button>
                 </div>
               </div>
-              <div style="margin: 0 10px;width:120px" v-if="item.type=='4' &&data.day.split('-')[1]==7&&(item.date).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
+              <div style="margin: 0 10px;width:120px" v-if="item.type=='4' &&data.day.split('-')[1]==7&&(item.day).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
 
                 <div class="pink-cycle" style="float: left;"></div>
                 <div style="font-size:13px;letter-spacing:2px">
-                  {{item.name}}
+                  {{item.title}}
                 </div>
-                <div class="delete-button-container" v-if="item.type=='4' && data.day.split('-')[1]==7 && (item.date).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
+                <div class="delete-button-container" v-if="item.type=='4' && data.day.split('-')[1]==7 && (item.day).indexOf(data.day.split('-').slice(2).join('-'))!=-1">
                   <el-button icon="el-icon-delete-solid" type="text" class="delete-button"  @click="delete_c()"></el-button>
                 </div>
               </div>
@@ -229,8 +229,9 @@ export default {
       if (this.year != d.getFullYear()) {
         this.year = d.getFullYear();
         this.selectMonth = d.getMonth();
-        this.getData()
+
       }
+      this.getData()
     },
     click(){
       console.log(this.scheduleData)
