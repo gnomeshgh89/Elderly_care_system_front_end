@@ -14,22 +14,12 @@
   </el-table>
 </template>
 
-// <script>
+<script>
 
 export default {
   data() {
     return{
-      tableData:[
-        {
-          id:'1',
-          type:'老人摔倒',
-          time:'2023-7-3',
-          destination:'卧室',
-          des:'有护工在场',
-          old_id:'123',
-          pic:''
-        }
-      ]
+      tableData:[]
     }
   },
   created(){
@@ -37,7 +27,18 @@ export default {
   },
   methods: {
     getData(){
-
+      var that = this
+      this.$axios.get("http://127.0.0.1:5000/readRecord")
+        .then(res => {
+          localStorage.setItem("record", JSON.stringify(res.data))
+          var json = JSON.parse(localStorage.getItem('record') || '[]');
+          for (let i in json) {
+            if (json[i].old_id == 0) {
+              json[i].old_id = '无';
+            }
+          }
+          that.tableData = json;
+        })
     },
     handleRemove(file, fileList) {
       this.fileList.pop();
