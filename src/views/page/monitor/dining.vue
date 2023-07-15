@@ -48,6 +48,47 @@
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      tableData: [],
+      timer: null,
+      num: 0
+    }
+  },
+  created() {
+    this.getData()
+  },
+  mounted() {
+    if (this.timer) {
+      clearInterval(this.timer)
+    } else {
+      var that = this
+      this.timer = setInterval(() => {
+        that.getData();
+      }, 2000
+      )
+    }
+  },
+  methods: {
+    getData: function () {
+
+      //获取记录
+      var that = this
+      this.$axios.get("http://127.0.0.1:5000/corridorRecord")
+        .then(res => {
+          localStorage.setItem("corridorRecord", JSON.stringify(res.data))
+          that.tableData = JSON.parse(localStorage.getItem('corridorRecord') || '[]')
+        })
+    }
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
+  }
+}
+</script>
+
 <style scoped>
 .el-scrollbar__wrap{
   overflow-x: hidden;
