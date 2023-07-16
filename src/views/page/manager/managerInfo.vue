@@ -18,24 +18,24 @@
         <el-input v-model="form.email"></el-input>
       </el-form-item>
       <el-form-item label="电话" prop="phone">
-        <el-input v-model="form.phone" :disabled="true"></el-input>
+        <el-input v-model="form.phone" ></el-input>
       </el-form-item>
-      <el-form-item label="描述">
-        <el-input v-model="form.des"></el-input>
-      </el-form-item>
-      <el-form-item label="头像" prop="image" >
-        <div>
-          <el-upload
-              v-model="fileList"
-              list-type="picture-card"
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload>
-          <el-dialog v-model="form.dialogVisible">
-            <img width="100%" :src="form.dialogImageUrl" alt="" />
-          </el-dialog>
-        </div>
-      </el-form-item>
+<!--      <el-form-item label="描述">-->
+<!--        <el-input v-model="form.des"></el-input>-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="头像" prop="image" >-->
+<!--        <div>-->
+<!--          <el-upload-->
+<!--              v-model="fileList"-->
+<!--              list-type="picture-card"-->
+<!--          >-->
+<!--            <i class="el-icon-plus"></i>-->
+<!--          </el-upload>-->
+<!--          <el-dialog v-model="form.dialogVisible">-->
+<!--            <img width="100%" :src="form.dialogImageUrl" alt="" />-->
+<!--          </el-dialog>-->
+<!--        </div>-->
+<!--      </el-form-item>-->
 
       <el-form-item  style="width:100%;">
         <el-button type="primary" @click="modify()"  style="width:50%;margin-left:80px;margin-top:10px;border-color:#f88901;background-color: #F3CEAE">保存修改</el-button>
@@ -45,7 +45,7 @@
 </template>
 <script>
 
-import {getAdminInfo} from "@/api/user";
+import {getAdminInfo, updateAdmin} from "@/api/user";
 
 export default {
   data() {
@@ -70,10 +70,17 @@ export default {
   },
   methods: {
     modify() {
-      this.$router.push('/home')
+      updateAdmin(this.form).then(res => {
+        this.$message.success("修改成功")
+
+      }).catch(error => {
+        console.log(error)
+      })
+      // this.$router.push('/home')
     },
     getAdminInfo(){
       getAdminInfo().then(res => {
+
         this.form= res.data
         // this.listForm.total=res.data.records.length
 
