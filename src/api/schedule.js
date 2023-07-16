@@ -35,7 +35,7 @@ export function getScheduleAll(month) {
 export function addOldSchedule(id) {
     return service({
         url: 'user/elder/send/one/'+id,
-        method: 'post',
+        method: 'get',
 
     })
 }

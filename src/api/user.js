@@ -32,3 +32,12 @@ export function getAdminInfo() {
 
     })
 }
+
+
+export function updateAdmin(data) {
+    return service({
+        url: 'user/admin/update/basic',
+        method: 'put',
+        data: data
+    })
+}
